@@ -34,7 +34,8 @@ export default defineConfig({
                     text: '中国',
                     link: '/criminal-record/china',
                     items: [
-                      { text: '广东省', link: '/criminal-record/china/guangdong' }
+                      { text: '广东省', link: '/criminal-record/china/guangdong' },
+                      { text: '河北省', link: '/criminal-record/china/hebei' }
                     ]
                   },
                   {
