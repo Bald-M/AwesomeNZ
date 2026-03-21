@@ -5,7 +5,6 @@ outline: deep
 # 河北省 · 无犯罪记录证明
 
 河北省居民可通过「河北省公安机关无犯罪记录证明」小程序在线申请无犯罪记录证明，无需现场办理。
-
 ## 办理渠道
 
 **河北省公安机关无犯罪记录证明** 小程序 / App
@@ -23,34 +22,25 @@ outline: deep
    
    打开小程序，点击 ”无犯罪证明自主申请“ 并注册登陆，**需要进行人脸识别！**
    
-   <img src="/images/image_1.jpg" alt="wid" style="zoom:40%;" />
+   <img src="./images/image_1.jpg" alt="wid" style="zoom:40%;" />
    
 2. #### 填写信息
    
    需要填写个人信息以及上传身份证正反面照片：
 
-   <img src="images/image_2.jpg" style="zoom:40%;" />
+   <img src="./images/image_2.jpg" style="zoom:40%;" />
 
    “用途” 根据个人情况填写，建议查询开始和结束日期写从出生到申请时的日期。户籍和居住地按照个人真实情况填写：
    
-   <img src="images/image_3.jpg" style="zoom:40%;" />
+   <img src="./images/image_3.jpg" style="zoom:40%;" />
    
-   <img src="images/image_4.jpg" style="zoom:40%;" />
-   
-   
-   
+   <img src="./images/image_4.jpg" style="zoom:40%;" />
+      
 3. #### 提交后等待公安机关审核
-   
-   最快当天出结果：
-   
-   <img src="images/image_5.jpg" style="zoom:40%;" />
-
-
-
+      最快当天出结果：
+      <img src="./images/image_5.jpg" style="zoom:40%;" />
 - #### 注意事项
-
   若无法线上办理，可致电当地公安或前往线下窗口咨询
-
 ------
 
 *最后编辑：2026-03-21   作者: [wrx012](https://github.com/wrx012)* 
