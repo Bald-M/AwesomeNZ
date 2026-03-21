@@ -10,7 +10,8 @@ outline: deep
 
 | 省份/地区 | 办理方式 | 链接 |
 |----------|----------|------|
-| [广东省](/criminal-record/china/guangdong/) | 粤省事小程序 | → |
+| [广东省](/criminal-record/china/guangdong/) | “粤省事”小程序 | → |
+| [河北省](/criminal-record/china/hebei/) | “河北省公安机关无犯罪记录证明”小程序 | → |
 | 其他省份 | 待补充 | — |
 
 ::: tip
