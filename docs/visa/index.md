@@ -11,6 +11,7 @@ outline: deep
 | 签证类型 | 说明 | 链接 |
 |----------|------|------|
 | [学生签证](/visa/student-visas/student-visa/) | 赴新西兰留学 | 材料准备、在线申请流程 |
+| [毕业后工签](/visa/work-visas/post-study-work-visa/) | 学签转工签 | 体检、Completion Letter、移民局在线申请 |
 
 *更多签证类型持续更新中。*
 
@@ -24,3 +25,6 @@ outline: deep
 - [出国体检](/pre-departure-medical/) — 签证申请常需胸片体检
 - [无犯罪记录证明](/criminal-record/) — 中国及新西兰办理方式
 - [银行流水](/bank-statement/) — 签证资金证明材料
+
+---
+*最后编辑：待补充* · 作者：[Bald-M](https://github.com/Bald-M)

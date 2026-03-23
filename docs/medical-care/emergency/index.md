@@ -48,4 +48,4 @@ outline: deep
 4. 提交 Pull Request
 
 ---
-*最后编辑：待补充*
+*最后编辑：待补充* · 作者：[Bald-M](https://github.com/Bald-M)

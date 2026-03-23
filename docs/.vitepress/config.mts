@@ -83,6 +83,15 @@ export default defineConfig({
                   {
                     text: '学生签证',
                     link: '/visa/student-visas/student-visa'
+                  },
+                  {
+                    text: '毕业后工签',
+                    link: '/visa/work-visas/post-study-work-visa',
+                    items: [
+                      { text: '体检', link: '/visa/work-visas/post-study-work-visa/medical-examination' },
+                      { text: 'Completion Letter', link: '/visa/work-visas/post-study-work-visa/completion-letter' },
+                      { text: '移民局在线申请', link: '/visa/work-visas/post-study-work-visa/immigration-application' }
+                    ]
                   }
                 ]
               },

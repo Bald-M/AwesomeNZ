@@ -27,3 +27,6 @@ outline: deep
 - [出国体检 - 胸片](/pre-departure-medical/)：胸片有效期 36 个月
 - [无犯罪记录证明](/criminal-record/)：中国 / 新西兰
 - [银行流水](/bank-statement/)：存款证明
+
+---
+*最后编辑：待补充* · 作者：[Bald-M](https://github.com/Bald-M)
