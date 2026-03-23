@@ -17,3 +17,6 @@ outline: deep
 ::: tip
 建议办理前咨询当地公安或政务部门，确认最新办理流程及所需材料。
 :::
+
+---
+*最后编辑：待补充* · 作者：[Bald-M](https://github.com/Bald-M)

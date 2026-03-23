@@ -26,4 +26,4 @@ outline: deep
 4. **等待审核**：通常数日至数周内到账
 
 ---
-*最后编辑：待补充*
+*最后编辑：待补充* · 作者：[Bald-M](https://github.com/Bald-M)
