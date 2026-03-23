@@ -40,6 +40,7 @@ jobs:
         env:
           # 使用自定义域名时 base 必须为 /，否则 CSS/JS 路径错误导致样式丢失
           BASE_PATH: /
+          SITE_URL: https://www.awesome-nz.com
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
