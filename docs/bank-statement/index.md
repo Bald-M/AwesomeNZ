@@ -15,11 +15,15 @@ outline: deep
 | 银行 | 适用场景 | 链接 |
 |------|----------|------|
 | [ANZ](/bank-statement/anz/) | 新西兰 | ANZ 网上银行 / goMoney |
+| [BNZ](/bank-statement/bnz/) | 新西兰 | [BNZ 官网](https://www.bnz.co.nz/) / App |
+| [Kiwibank](/bank-statement/kiwibank/) | 新西兰 | [Kiwibank 官网](https://www.kiwibank.co.nz/personal-banking/) |
 | [招商银行](/bank-statement/cmb/) | 中国 | 招商银行 App |
 
 ## 办理入口
 
 - **新西兰 ANZ**：登录 [ANZ Internet Banking](https://www.anz.co.nz/personal/accounts/online-banking/) 或 goMoney App
+- **新西兰BNZ：**登陆 [BNZ 官网](https://www.bnz.co.nz/) 或者 App
+- **新西兰Kiwibank：**登陆 [Kiwibank 官网](https://www.kiwibank.co.nz/personal-banking/)
 - **中国招商银行**：招商银行 App / 网银
 
 ## 注意事项

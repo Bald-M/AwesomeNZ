@@ -52,6 +52,8 @@ export default defineConfig({
                 link: '/bank-statement',
                 items: [
                   { text: 'ANZ', link: '/bank-statement/anz' },
+                  { text: 'BNZ', link: '/bank-statement/bnz' },
+                  { text: 'Kiwibank', link: '/bank-statement/kiwibank' },
                   { text: '招商银行', link: '/bank-statement/cmb' }
                 ]
               },

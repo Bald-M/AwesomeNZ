@@ -12,6 +12,7 @@ outline: deep
 |------|----------|
 | [中国](/criminal-record/china/) | |
 | └ [广东省](/criminal-record/china/guangdong/) | 粤省事小程序 |
+| └ [河北省](/criminal-record/china/hebei/) | “河北省公安机关无犯罪记录证明”小程序 |
 | 其他国家/地区 | 待补充 |
 
 ::: tip
