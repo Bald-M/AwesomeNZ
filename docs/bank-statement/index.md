@@ -1,4 +1,5 @@
 ---
+description: 银行流水办理指南，整理新西兰 ANZ、BNZ、Kiwibank 和中国招商银行电子流水获取方式。
 outline: deep
 ---
 

@@ -1,6 +1,22 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
+title: Awesome NZ - 新西兰生活办事指南
+titleTemplate: ':title'
+description: Awesome NZ 是面向中文用户的新西兰生活、签证、医疗、银行流水与办事指南，整理出国前后常见办事流程和避坑经验。
 layout: home
+head:
+  - - script
+    - type: application/ld+json
+    - |
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Awesome NZ",
+        "alternateName": ["AwesomeNZ", "awesome-nz"],
+        "url": "https://www.awesome-nz.com/",
+        "inLanguage": "zh-CN",
+        "description": "面向中文用户的新西兰生活、签证、医疗、银行流水与办事指南。"
+      }
 
 hero:
   name: "Awesome NZ"
@@ -9,7 +25,7 @@ hero:
   actions:
     - theme: brand
       text: 开始阅读
-      link: /pre-departure-medical
+      link: /pre-departure-medical/
 
 features:
   - title: 出国体检
