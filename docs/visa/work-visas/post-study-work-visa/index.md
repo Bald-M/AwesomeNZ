@@ -1,4 +1,5 @@
 ---
+description: 新西兰毕业后工签申请指南，整理申请时限、材料清单、体检、Completion Letter 和移民局在线申请流程。
 outline: deep
 ---
 

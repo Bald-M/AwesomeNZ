@@ -1,4 +1,5 @@
 ---
+description: 新西兰学生签证在线申请指南，整理材料准备、RealMe 登录、申请流程、体检和银行流水相关注意事项。
 outline: deep
 ---
 

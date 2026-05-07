@@ -1,4 +1,5 @@
 ---
+description: 新西兰 GP 家庭医生指南，介绍注册 GP、预约就诊、常见费用和学生保险报销相关入口。
 outline: deep
 ---
 
