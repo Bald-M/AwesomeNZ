@@ -110,9 +110,86 @@ export default defineConfig({
         langMenuLabel: 'Change language',
         nav: [
           { text: 'Home', link: '/en/' },
-          { text: 'Examples', link: '/en/markdown-examples' }
+          { text: 'Guides', link: '/en/pre-departure-medical' }
         ],
         sidebar: [
+          {
+            text: 'Guides',
+            items: [
+              { text: 'Pre-departure Medical Exam - Chest X-ray', link: '/en/pre-departure-medical' },
+              {
+                text: 'Criminal Record Certificate',
+                link: '/en/criminal-record',
+                items: [
+                  {
+                    text: 'China',
+                    link: '/en/criminal-record/china',
+                    items: [
+                      { text: 'Guangdong Province', link: '/en/criminal-record/china/guangdong' },
+                      { text: 'Hebei Province', link: '/en/criminal-record/china/hebei' }
+                    ]
+                  },
+                  {
+                    text: 'New Zealand',
+                    link: '/en/criminal-record/newzealand',
+                    items: [
+                      { text: 'Auckland', link: '/en/criminal-record/newzealand/auckland' }
+                    ]
+                  }
+                ]
+              },
+              {
+                text: 'Bank Statements',
+                link: '/en/bank-statement',
+                items: [
+                  { text: 'ANZ', link: '/en/bank-statement/anz' },
+                  { text: 'BNZ', link: '/en/bank-statement/bnz' },
+                  { text: 'Kiwibank', link: '/en/bank-statement/kiwibank' },
+                  { text: 'China Merchants Bank', link: '/en/bank-statement/cmb' }
+                ]
+              },
+              {
+                text: 'Medical Care',
+                link: '/en/medical-care',
+                items: [
+                  { text: 'GP (General Practitioner)', link: '/en/medical-care/gp' },
+                  {
+                    text: 'Emergency Care',
+                    link: '/en/medical-care/emergency',
+                    items: [
+                      { text: 'White Cross', link: '/en/medical-care/emergency/white-cross' }
+                    ]
+                  },
+                  {
+                    text: 'Medical Reimbursement',
+                    link: '/en/medical-care/reimbursement',
+                    items: [
+                      { text: 'Student Insurance', link: '/en/medical-care/reimbursement/student-insurance' }
+                    ]
+                  }
+                ]
+              },
+              {
+                text: 'Visas',
+                link: '/en/visa',
+                items: [
+                  {
+                    text: 'Student Visa',
+                    link: '/en/visa/student-visas/student-visa'
+                  },
+                  {
+                    text: 'Post-study Work Visa',
+                    link: '/en/visa/work-visas/post-study-work-visa',
+                    items: [
+                      { text: 'Medical Exam', link: '/en/visa/work-visas/post-study-work-visa/medical-examination' },
+                      { text: 'Completion Letter', link: '/en/visa/work-visas/post-study-work-visa/completion-letter' },
+                      { text: 'Immigration New Zealand Online Application', link: '/en/visa/work-visas/post-study-work-visa/immigration-application' }
+                    ]
+                  }
+                ]
+              },
+            ]
+          }
         ]
       }
     }
