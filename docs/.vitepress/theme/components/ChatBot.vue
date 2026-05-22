@@ -61,10 +61,14 @@ const content = computed(() => {
       sourceTitle: 'Sources',
       modelLabel: 'Choose DeepSeek model',
       remoteErrorPrefix: 'DeepSeek did not answer successfully: ',
-      remoteErrorHelp: 'I am showing the local guide search fallback below. Check that the local proxy is running and VITE_CHAT_API_ENDPOINT points to http://127.0.0.1:8787/chat.',
+      remoteLocalHelp: 'I am showing the local guide search fallback below. Check that the local proxy is running and VITE_CHAT_API_ENDPOINT points to http://127.0.0.1:8787/chat.',
+      remoteProductionHelp: 'I am showing the local guide search fallback below. Check that the public chat proxy URL, CORS settings, API key, model access, and proxy logs are all healthy.',
+      remoteMissingLocalHelp: 'I am showing the local guide search fallback below. To use DeepSeek locally, start the local proxy and make sure VITE_CHAT_API_ENDPOINT points to http://127.0.0.1:8787/chat.',
+      remoteMissingProductionHelp: 'I am showing the local guide search fallback below. This deployed site does not have a public DeepSeek proxy configured yet. Set the GitHub Repository Variable VITE_CHAT_API_ENDPOINT to your public proxy URL, then redeploy.',
       remoteMissing: 'The DeepSeek endpoint is not configured.',
       remoteEmpty: 'The DeepSeek response did not include an answer.',
-      fallbackNotice: 'This is not a DeepSeek answer. It is the local guide-search fallback. To use V4 Pro, run the local proxy and start the docs site with the chat endpoint enabled.'
+      fallbackLocalNotice: 'This is not a DeepSeek answer. It is the local guide-search fallback. To use V4 Pro locally, run the local proxy and start the docs site with the chat endpoint enabled.',
+      fallbackProductionNotice: 'This is not a DeepSeek answer. It is the local guide-search fallback. To use V4 Pro online, deploy a public chat proxy and set VITE_CHAT_API_ENDPOINT in GitHub Actions Variables.'
     }
   }
 
@@ -85,10 +89,14 @@ const content = computed(() => {
     sourceTitle: '来源',
     modelLabel: '选择 DeepSeek 模型',
     remoteErrorPrefix: 'DeepSeek 没有成功回答：',
-    remoteErrorHelp: '下面先显示本地教程检索兜底结果。请确认本地代理已启动，并且 VITE_CHAT_API_ENDPOINT 指向 http://127.0.0.1:8787/chat。',
+    remoteLocalHelp: '下面先显示本地教程检索兜底结果。请确认本地代理已启动，并且 VITE_CHAT_API_ENDPOINT 指向 http://127.0.0.1:8787/chat。',
+    remoteProductionHelp: '下面先显示本地教程检索兜底结果。请检查公开聊天代理地址、CORS 设置、API Key、模型权限和代理服务日志。',
+    remoteMissingLocalHelp: '下面先显示本地教程检索兜底结果。要在本地使用 DeepSeek，请启动本地代理，并确认 VITE_CHAT_API_ENDPOINT 指向 http://127.0.0.1:8787/chat。',
+    remoteMissingProductionHelp: '下面先显示本地教程检索兜底结果。当前线上站点还没有配置公开 DeepSeek 代理；请在 GitHub Repository Variable 中把 VITE_CHAT_API_ENDPOINT 设置为你的公开代理地址，然后重新部署。',
     remoteMissing: 'DeepSeek 接口地址没有配置。',
     remoteEmpty: 'DeepSeek 返回里没有可显示的回答。',
-    fallbackNotice: '注意：这不是 DeepSeek 回答，而是本地检索兜底。要使用 V4 Pro，请启动本地代理，并用带聊天接口的方式启动文档站。'
+    fallbackLocalNotice: '注意：这不是 DeepSeek 回答，而是本地检索兜底。要在本地使用 V4 Pro，请启动本地代理，并用带聊天接口的方式启动文档站。',
+    fallbackProductionNotice: '注意：这不是 DeepSeek 回答，而是本地检索兜底。要在线上使用 V4 Pro，请部署公开聊天代理，并在 GitHub Actions Variables 配置 VITE_CHAT_API_ENDPOINT。'
   }
 })
 
@@ -111,6 +119,25 @@ const inputEl = ref<HTMLTextAreaElement | null>(null)
 let messageCounter = 0
 
 const canSend = computed(() => question.value.trim().length > 0 && !isThinking.value && !isLoadingIndex.value)
+const chatEndpoint = computed(() => String(import.meta.env.VITE_CHAT_API_ENDPOINT || '').trim())
+
+function isLocalRuntime() {
+  if (typeof window === 'undefined') return false
+  return ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)
+}
+
+function getRemoteHelp() {
+  const isLocal = isLocalRuntime()
+  if (!chatEndpoint.value) {
+    return isLocal ? content.value.remoteMissingLocalHelp : content.value.remoteMissingProductionHelp
+  }
+
+  return isLocal ? content.value.remoteLocalHelp : content.value.remoteProductionHelp
+}
+
+function getFallbackNotice() {
+  return isLocalRuntime() ? content.value.fallbackLocalNotice : content.value.fallbackProductionNotice
+}
 
 function nextMessageId() {
   messageCounter += 1
@@ -345,11 +372,11 @@ function buildLocalAnswer(matches: ScoredChunk[]) {
     return `- ${match.title}${heading}：${match.snippet}`
   })
 
-  return `${content.value.localPrefix}\n\n${lines.join('\n')}\n\n${content.value.localSuffix}\n\n${content.value.fallbackNotice}`
+  return `${content.value.localPrefix}\n\n${lines.join('\n')}\n\n${content.value.localSuffix}\n\n${getFallbackNotice()}`
 }
 
 async function requestRemoteAnswer(query: string, matches: ScoredChunk[]): Promise<RemoteAnswer> {
-  const endpoint = import.meta.env.VITE_CHAT_API_ENDPOINT
+  const endpoint = chatEndpoint.value
   if (!endpoint) return { answer: null, error: content.value.remoteMissing }
 
   try {
@@ -395,7 +422,7 @@ function buildAnswer(matches: ScoredChunk[], remoteAnswer: RemoteAnswer) {
   if (remoteAnswer.answer) return remoteAnswer.answer
 
   const localAnswer = buildLocalAnswer(matches)
-  return `${content.value.remoteErrorPrefix}${remoteAnswer.error || content.value.remoteEmpty}\n\n${content.value.remoteErrorHelp}\n\n${localAnswer}`
+  return `${content.value.remoteErrorPrefix}${remoteAnswer.error || content.value.remoteEmpty}\n\n${getRemoteHelp()}\n\n${localAnswer}`
 }
 
 async function sendQuestion() {
