@@ -40,10 +40,9 @@ jobs:
           # 使用自定义域名时 base 必须为 /，否则 CSS/JS 路径错误导致样式丢失
           BASE_PATH: /
           SITE_URL: https://www.awesome-nz.com
-          # 仅供构建期 Node 脚本使用，不要改成 VITE_ 前缀或写入前端产物
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          # 线上聊天只能指向你自己的公开代理地址，不能直接放 DeepSeek API Key
-          VITE_CHAT_API_ENDPOINT: ${{ vars.VITE_CHAT_API_ENDPOINT }}
+          # 纯前端直连 DeepSeek：该变量会进入前端产物，用户可在浏览器中看到
+          VITE_DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          VITE_DEEPSEEK_BASE_URL: https://api.deepseek.com
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
