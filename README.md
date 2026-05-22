@@ -9,7 +9,7 @@
 - **银行流水**：ANZ、BNZ、Kiwibank、招商银行电子流水获取方法
 - **看病**：GP、急诊（White Cross）、学生保险报销
 - **签证**：学生签证、毕业后工签材料与流程
-- **站内问答助手**：基于本站 Markdown 内容生成检索索引，可选接入 DeepSeek 代理生成自然语言回答
+- **站内问答助手**：基于本站 Markdown 内容生成检索索引，可选直连 DeepSeek 生成自然语言回答
 
 更多内容详见站内指南。
 
@@ -19,7 +19,7 @@
 - [Tailwind CSS](https://tailwindcss.com/)
 - Node.js 脚本生成站内问答索引、sitemap 与 robots.txt
 
-> **本项目主体为纯前端静态站点**，无需数据库。GitHub Pages 部署的是静态 Markdown、图片和构建产物；DeepSeek API 只能通过本地或线上代理调用，不能把 API Key 打包进前端。
+> **本项目主体为纯前端静态站点**，无需数据库。GitHub Pages 部署的是静态 Markdown、图片和构建产物；问答助手会在构建时把 DeepSeek API Key 写入前端产物，适合接受 Key 暴露风险的个人低成本场景。
 
 ## 环境要求
 
@@ -46,7 +46,7 @@ pnpm run docs:preview
 
 ## 本地测试问答助手与 DeepSeek
 
-默认情况下，问答助手会先检索本站教程内容。如果没有配置 DeepSeek 代理，它会显示本地检索兜底结果。
+默认情况下，问答助手会先检索本站教程内容。如果没有配置 DeepSeek API Key，或者 DeepSeek 请求失败，它会显示本地检索兜底结果。
 
 如需在本地测试 DeepSeek V4 Pro / V4 Flash：
 
@@ -58,29 +58,21 @@ cp .env.example .env.local
 在 `.env.local` 中填入你的 DeepSeek API Key：
 
 ```bash
-DEEPSEEK_API_KEY=sk-your-deepseek-api-key
-DEEPSEEK_MODEL=deepseek-v4-pro
-DEEPSEEK_THINKING=disabled
-DEEPSEEK_PROXY_HOST=127.0.0.1
-DEEPSEEK_PROXY_PORT=8787
-VITE_CHAT_API_ENDPOINT=http://127.0.0.1:8787/chat
+VITE_DEEPSEEK_API_KEY=sk-your-deepseek-api-key
+VITE_DEEPSEEK_BASE_URL=https://api.deepseek.com
+VITE_DEEPSEEK_MAX_TOKENS=1200
+VITE_DEEPSEEK_TEMPERATURE=0.2
 ```
 
-然后开两个终端：
+然后启动 VitePress：
 
 ```bash
-# 终端 1：启动本地 DeepSeek 代理
-pnpm run chat:proxy
+pnpm run docs:dev
 ```
 
-```bash
-# 终端 2：启动带聊天接口的 VitePress 开发服务
-pnpm run docs:dev:chat
-```
+打开页面后，右下角问答助手可在 `V4 Pro` 和 `V4 Flash` 之间切换。若回答中提示 DeepSeek 请求失败，请检查 `.env.local` 是否配置正确、DeepSeek 账户余额和模型权限是否可用。
 
-打开页面后，右下角问答助手可在 `V4 Pro` 和 `V4 Flash` 之间切换。若回答中提示 DeepSeek 请求失败，请先检查本地代理是否启动、`.env.local` 是否配置正确、DeepSeek 账户余额和模型权限是否可用。
-
-> 不要创建 `VITE_DEEPSEEK_API_KEY`，也不要把 DeepSeek API Key 写进 Markdown、Vue 组件、VitePress 配置或 GitHub 公开变量。所有 `VITE_` 变量都会进入前端产物。
+> 注意：所有 `VITE_` 变量都会进入前端产物。`VITE_DEEPSEEK_API_KEY` 会暴露在浏览器里，本项目按“接受 Key 暴露风险”的纯前端方案处理。
 
 ## GitHub Pages 部署
 
@@ -98,23 +90,13 @@ Settings → Secrets and variables → Actions → Secrets → New repository se
 Name: DEEPSEEK_API_KEY
 ```
 
-该 Secret 只适合构建期 Node 脚本使用，不能用于浏览器端实时调用 DeepSeek。
-
-如果线上问答助手需要真正调用 DeepSeek，请额外部署一个公开后端代理（例如 Cloudflare Workers、Vercel Functions、Netlify Functions 或自有服务器），再添加 Repository Variable：
-
-```text
-Settings → Secrets and variables → Actions → Variables → New repository variable
-Name: VITE_CHAT_API_ENDPOINT
-Value: https://你的代理域名/chat
-```
-
-不要把 `VITE_CHAT_API_ENDPOINT` 设置为 DeepSeek 官方 API 地址；它必须指向你自己的代理服务。线上未配置该变量时，站点仍会正常构建和部署，问答助手会使用本地教程检索兜底。
+GitHub Actions 会在构建时把 `DEEPSEEK_API_KEY` 注入为 `VITE_DEEPSEEK_API_KEY`，前端会直接请求 `https://api.deepseek.com/chat/completions`。线上未配置该 Secret 时，站点仍会正常构建和部署，问答助手会使用本地教程检索兜底。
 
 ## 如何贡献
 
 欢迎通过 Pull Request 补充或修正内容，一起完善这份互助手册。
 
-> 本项目为**静态文档站**，基于 VitePress 构建。所有指南内容均为 Markdown 与图片资源；聊天助手的 DeepSeek 调用需要单独代理，不属于 GitHub Pages 静态部署本身。
+> 本项目为**静态文档站**，基于 VitePress 构建。所有指南内容均为 Markdown 与图片资源；聊天助手在浏览器端直接调用 DeepSeek。
 
 ### 贡献流程
 

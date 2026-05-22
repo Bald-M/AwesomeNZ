@@ -8,9 +8,8 @@
   },
   "scripts": {
     "chat:index": "node generate-chat-index.mjs",
-    "chat:proxy": "node scripts/deepseek-chat-proxy.mjs",
     "docs:dev": "node generate-chat-index.mjs && vitepress dev docs",
-    "docs:dev:chat": "node generate-chat-index.mjs && VITE_CHAT_API_ENDPOINT=http://127.0.0.1:8787/chat vitepress dev docs --host 127.0.0.1",
+    "docs:dev:chat": "node generate-chat-index.mjs && vitepress dev docs --host 127.0.0.1",
     "docs:build": "node generate-chat-index.mjs && vitepress build docs && node generate-sitemap.mjs",
     "docs:preview": "vitepress preview docs"
   }

@@ -38,6 +38,11 @@ type RemoteAnswer = {
   error?: string
 }
 
+type DeepSeekMessage = {
+  role: 'system' | 'user'
+  content: string
+}
+
 const { lang } = useData()
 
 const locale = computed<LocaleKey>(() => (lang.value === 'en' ? 'en' : 'zh'))
@@ -61,14 +66,11 @@ const content = computed(() => {
       sourceTitle: 'Sources',
       modelLabel: 'Choose DeepSeek model',
       remoteErrorPrefix: 'DeepSeek did not answer successfully: ',
-      remoteLocalHelp: 'I am showing the local guide search fallback below. Check that the local proxy is running and VITE_CHAT_API_ENDPOINT points to http://127.0.0.1:8787/chat.',
-      remoteProductionHelp: 'I am showing the local guide search fallback below. Check that the public chat proxy URL, CORS settings, API key, model access, and proxy logs are all healthy.',
-      remoteMissingLocalHelp: 'I am showing the local guide search fallback below. To use DeepSeek locally, start the local proxy and make sure VITE_CHAT_API_ENDPOINT points to http://127.0.0.1:8787/chat.',
-      remoteMissingProductionHelp: 'I am showing the local guide search fallback below. This deployed site does not have a public DeepSeek proxy configured yet. Set the GitHub Repository Variable VITE_CHAT_API_ENDPOINT to your public proxy URL, then redeploy.',
-      remoteMissing: 'The DeepSeek endpoint is not configured.',
+      remoteHelp: 'I am showing the local guide search fallback below. Check the API key, model access, account balance, and whether the browser request to DeepSeek is allowed.',
+      remoteMissingHelp: 'I am showing the local guide search fallback below. This build does not include VITE_DEEPSEEK_API_KEY. Add DEEPSEEK_API_KEY in GitHub Secrets and redeploy, or set VITE_DEEPSEEK_API_KEY locally.',
+      remoteMissing: 'The DeepSeek API key is not configured.',
       remoteEmpty: 'The DeepSeek response did not include an answer.',
-      fallbackLocalNotice: 'This is not a DeepSeek answer. It is the local guide-search fallback. To use V4 Pro locally, run the local proxy and start the docs site with the chat endpoint enabled.',
-      fallbackProductionNotice: 'This is not a DeepSeek answer. It is the local guide-search fallback. To use V4 Pro online, deploy a public chat proxy and set VITE_CHAT_API_ENDPOINT in GitHub Actions Variables.'
+      fallbackNotice: 'This is not a DeepSeek answer. It is the local guide-search fallback.'
     }
   }
 
@@ -89,14 +91,11 @@ const content = computed(() => {
     sourceTitle: '来源',
     modelLabel: '选择 DeepSeek 模型',
     remoteErrorPrefix: 'DeepSeek 没有成功回答：',
-    remoteLocalHelp: '下面先显示本地教程检索兜底结果。请确认本地代理已启动，并且 VITE_CHAT_API_ENDPOINT 指向 http://127.0.0.1:8787/chat。',
-    remoteProductionHelp: '下面先显示本地教程检索兜底结果。请检查公开聊天代理地址、CORS 设置、API Key、模型权限和代理服务日志。',
-    remoteMissingLocalHelp: '下面先显示本地教程检索兜底结果。要在本地使用 DeepSeek，请启动本地代理，并确认 VITE_CHAT_API_ENDPOINT 指向 http://127.0.0.1:8787/chat。',
-    remoteMissingProductionHelp: '下面先显示本地教程检索兜底结果。当前线上站点还没有配置公开 DeepSeek 代理；请在 GitHub Repository Variable 中把 VITE_CHAT_API_ENDPOINT 设置为你的公开代理地址，然后重新部署。',
-    remoteMissing: 'DeepSeek 接口地址没有配置。',
+    remoteHelp: '下面先显示本地教程检索兜底结果。请检查 API Key、模型权限、账户余额，以及浏览器是否允许直接请求 DeepSeek。',
+    remoteMissingHelp: '下面先显示本地教程检索兜底结果。当前构建没有包含 VITE_DEEPSEEK_API_KEY；请在 GitHub Secrets 添加 DEEPSEEK_API_KEY 后重新部署，或本地设置 VITE_DEEPSEEK_API_KEY。',
+    remoteMissing: 'DeepSeek API Key 没有配置。',
     remoteEmpty: 'DeepSeek 返回里没有可显示的回答。',
-    fallbackLocalNotice: '注意：这不是 DeepSeek 回答，而是本地检索兜底。要在本地使用 V4 Pro，请启动本地代理，并用带聊天接口的方式启动文档站。',
-    fallbackProductionNotice: '注意：这不是 DeepSeek 回答，而是本地检索兜底。要在线上使用 V4 Pro，请部署公开聊天代理，并在 GitHub Actions Variables 配置 VITE_CHAT_API_ENDPOINT。'
+    fallbackNotice: '注意：这不是 DeepSeek 回答，而是本地检索兜底。'
   }
 })
 
@@ -119,24 +118,28 @@ const inputEl = ref<HTMLTextAreaElement | null>(null)
 let messageCounter = 0
 
 const canSend = computed(() => question.value.trim().length > 0 && !isThinking.value && !isLoadingIndex.value)
-const chatEndpoint = computed(() => String(import.meta.env.VITE_CHAT_API_ENDPOINT || '').trim())
+const deepSeekApiKey = computed(() => String(import.meta.env.VITE_DEEPSEEK_API_KEY || '').trim())
+const deepSeekApiBaseUrl = computed(() => String(import.meta.env.VITE_DEEPSEEK_BASE_URL || 'https://api.deepseek.com').trim().replace(/\/+$/, ''))
+const deepSeekMaxTokens = computed(() => {
+  const value = Number.parseInt(String(import.meta.env.VITE_DEEPSEEK_MAX_TOKENS || '1200'), 10)
+  return Number.isFinite(value) && value > 0 ? value : 1200
+})
+const deepSeekTemperature = computed(() => {
+  const value = Number.parseFloat(String(import.meta.env.VITE_DEEPSEEK_TEMPERATURE || '0.2'))
+  return Number.isFinite(value) ? value : 0.2
+})
 
-function isLocalRuntime() {
-  if (typeof window === 'undefined') return false
-  return ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)
+function truncate(value: string, maxLength: number) {
+  const text = typeof value === 'string' ? value.trim() : ''
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text
 }
 
 function getRemoteHelp() {
-  const isLocal = isLocalRuntime()
-  if (!chatEndpoint.value) {
-    return isLocal ? content.value.remoteMissingLocalHelp : content.value.remoteMissingProductionHelp
-  }
-
-  return isLocal ? content.value.remoteLocalHelp : content.value.remoteProductionHelp
+  return deepSeekApiKey.value ? content.value.remoteHelp : content.value.remoteMissingHelp
 }
 
 function getFallbackNotice() {
-  return isLocalRuntime() ? content.value.fallbackLocalNotice : content.value.fallbackProductionNotice
+  return content.value.fallbackNotice
 }
 
 function nextMessageId() {
@@ -375,38 +378,83 @@ function buildLocalAnswer(matches: ScoredChunk[]) {
   return `${content.value.localPrefix}\n\n${lines.join('\n')}\n\n${content.value.localSuffix}\n\n${getFallbackNotice()}`
 }
 
+function buildDeepSeekMessages(query: string, matches: ScoredChunk[]): DeepSeekMessage[] {
+  const systemPrompt = locale.value === 'en'
+    ? [
+        'You are the AwesomeNZ guide assistant.',
+        'Answer using the provided guide excerpts first.',
+        'Do not merely quote or concatenate the excerpts.',
+        'Turn the excerpts into a concise practical answer with clear steps, required materials, caveats, and source titles when useful.',
+        'Be concrete and practical. Do not invent policy details, fees, URLs, or official requirements.',
+        'If the excerpts are not enough, say so clearly and suggest what the user should verify from official sources.',
+        'Answer in English unless the user asks for another language.'
+      ].join(' ')
+    : [
+        '你是 AwesomeNZ 指南助手。',
+        '请优先基于提供的本站教程片段回答。',
+        '不要只是复制或拼接教程片段。',
+        '请把片段整理成简洁、可执行的办事说明，包含步骤、所需材料、注意事项，必要时点出来源标题。',
+        '回答要具体、可操作，不要编造政策、费用、网址或官方要求。',
+        '如果教程片段信息不足，请明确说明依据不足，并建议用户到官方来源确认。',
+        '除非用户要求其他语言，否则用简体中文回答。'
+      ].join(' ')
+
+  const contextText = matches.length > 0
+    ? matches.slice(0, 5).map((match, index) => {
+        const title = truncate(match.title, 120)
+        const heading = truncate(match.heading, 120)
+        const url = truncate(match.url, 180)
+        const text = truncate(match.text, 1800)
+
+        return [
+          `[${index + 1}] ${title}${heading && heading !== title ? ` / ${heading}` : ''}`,
+          `URL: ${url}`,
+          text
+        ].join('\n')
+      }).join('\n\n')
+    : locale.value === 'en'
+      ? 'No guide excerpt was matched.'
+      : '没有匹配到教程片段。'
+
+  const userPrompt = locale.value === 'en'
+    ? `User question:\n${truncate(query, 1200)}\n\nGuide excerpts:\n${contextText}`
+    : `用户问题：\n${truncate(query, 1200)}\n\n本站教程片段：\n${contextText}`
+
+  return [
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userPrompt }
+  ]
+}
+
 async function requestRemoteAnswer(query: string, matches: ScoredChunk[]): Promise<RemoteAnswer> {
-  const endpoint = chatEndpoint.value
-  if (!endpoint) return { answer: null, error: content.value.remoteMissing }
+  const apiKey = deepSeekApiKey.value
+  if (!apiKey) return { answer: null, error: content.value.remoteMissing }
 
   try {
-    const response = await fetch(endpoint, {
+    const response = await fetch(`${deepSeekApiBaseUrl.value}/chat/completions`, {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        question: query,
-        locale: locale.value,
         model: selectedModel.value,
-        contexts: matches.map((match) => ({
-          title: match.title,
-          heading: match.heading,
-          url: match.url,
-          text: match.text
-        }))
+        messages: buildDeepSeekMessages(query, matches),
+        thinking: { type: 'disabled' },
+        max_tokens: deepSeekMaxTokens.value,
+        temperature: deepSeekTemperature.value,
+        stream: false
       })
     })
 
     const data = await response.json().catch(() => null)
     if (!response.ok) {
-      const message = data?.error || data?.message || `HTTP ${response.status}`
+      const message = data?.error?.message || data?.error || data?.message || `HTTP ${response.status}`
       return { answer: null, error: message }
     }
 
-    if (typeof data?.answer === 'string' && data.answer.trim()) return { answer: data.answer }
-    if (typeof data?.content === 'string' && data.content.trim()) return { answer: data.content }
-    if (typeof data?.message === 'string' && data.message.trim()) return { answer: data.message }
+    const answer = data?.choices?.[0]?.message?.content
+    if (typeof answer === 'string' && answer.trim()) return { answer }
 
     return { answer: null, error: content.value.remoteEmpty }
   } catch (error) {
