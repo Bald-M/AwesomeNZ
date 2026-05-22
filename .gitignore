@@ -4,6 +4,7 @@ node_modules/
 # VitePress
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+docs/public/chat-index.json
 .vitepress/cache/
 .vitepress/dist/
 
