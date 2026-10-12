@@ -110,4 +110,4 @@ Check “User Centre → My Applications” for updates and respond to any reque
 - [Application materials for mainland Chinese residents](https://zwfw.cscse.edu.cn/zwfw/lxfwzxwsfwdt2020/xlxwrz32/sqcl/ndjm/2026042823583912537/index.html)
 
 ---
-*Last checked: 12 October 2026 · Based on an application recorded on 29 September 2026*
+*Last edited: 2026-10-12* · Author: [Bald-M](https://github.com/Bald-M)

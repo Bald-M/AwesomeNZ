@@ -110,4 +110,4 @@ outline: deep
 - [申请材料说明：适用于中国内地居民](https://zwfw.cscse.edu.cn/zwfw/lxfwzxwsfwdt2020/xlxwrz32/sqcl/ndjm/2026042823583912537/index.html)（材料、授权声明、出入境记录）
 
 ---
-*最后核对：2026-10-12 · 根据 2026-09-29 实操记录整理*
+*最后编辑：2026-10-12* · 作者：[Bald-M](https://github.com/Bald-M)
