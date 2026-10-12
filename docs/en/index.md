@@ -14,6 +14,9 @@ hero:
 features:
   - title: Pre-departure Medical Exam
     details: Chest X-ray medical exam - designated hospital address, hours, required documents, exam process, and result collection
+  - title: Overseas Degree Credential Evaluation
+    details: Prepare documents, authorize travel records, and apply online after studying in New Zealand
+    link: /en/credential-evaluation/
   - title: Criminal Record Certificate
     details: Apply for a criminal record certificate through online channels - required materials and application steps
   - title: Notarization

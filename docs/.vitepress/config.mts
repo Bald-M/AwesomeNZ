@@ -26,6 +26,7 @@ export default defineConfig({
             text: '指南',
             items: [
               { text: '出国体检 - 胸片', link: '/pre-departure-medical/' },
+              { text: '留服学历学位认证', link: '/credential-evaluation/' },
               {
                 text: '无犯罪记录证明',
                 link: '/criminal-record/',
@@ -117,6 +118,7 @@ export default defineConfig({
             text: 'Guides',
             items: [
               { text: 'Pre-departure Medical Exam - Chest X-ray', link: '/en/pre-departure-medical/' },
+              { text: 'Overseas Degree Credential Evaluation', link: '/en/credential-evaluation/' },
               {
                 text: 'Criminal Record Certificate',
                 link: '/en/criminal-record/',
