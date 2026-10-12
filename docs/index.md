@@ -30,6 +30,9 @@ hero:
 features:
   - title: 出国体检
     details: 出国胸片体检 — 指定医院地址、工作时间、材料准备、检查流程及结果领取方式
+  - title: 留服学历学位认证
+    details: 新西兰学历回国认证 — 材料准备、出入境记录授权与在线申请步骤
+    link: /credential-evaluation/
   - title: 无犯罪记录证明
     details: 通过线上渠道办理无犯罪记录证明 — 材料准备与办理步骤
   - title: 公证
